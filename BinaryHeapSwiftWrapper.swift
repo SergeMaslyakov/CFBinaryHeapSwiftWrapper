@@ -91,6 +91,9 @@ final class BinaryHeapSwiftWrapper {
     /// The values in the array are ordered from least to greatest
     func getValues() -> [HeapObject] {
         let count = CFBinaryHeapGetCount(binaryHeap)
+
+        guard count > 0 else { return [] }
+
         let arrayOfPointers = UnsafeMutablePointer<UnsafeRawPointer?>.allocate(capacity: count)
         defer { arrayOfPointers.deallocate() }
 
