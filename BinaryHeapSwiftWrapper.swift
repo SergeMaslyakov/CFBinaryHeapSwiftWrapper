@@ -53,7 +53,10 @@ final class BinaryHeapSwiftWrapper {
     private lazy var binaryHeap: CFBinaryHeap = {
         let callBacksPtr = UnsafeMutablePointer<CFBinaryHeapCallBacks>.allocate(capacity: 1)
         callBacksPtr.initialize(to: callbacks)
-        defer { callBacksPtr.deallocate() }
+        defer {
+            callBacksPtr.deinitialize(count: 1)
+            callBacksPtr.deallocate()
+        }
 
         return CFBinaryHeapCreate(
             nil,
@@ -95,7 +98,10 @@ final class BinaryHeapSwiftWrapper {
         guard count > 0 else { return [] }
 
         let arrayOfPointers = UnsafeMutablePointer<UnsafeRawPointer?>.allocate(capacity: count)
-        defer { arrayOfPointers.deallocate() }
+        defer {
+            arrayOfPointers.deinitialize(count: count)
+            arrayOfPointers.deallocate()
+        }
 
         CFBinaryHeapGetValues(binaryHeap, arrayOfPointers)
 
